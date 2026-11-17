@@ -20,7 +20,19 @@ const asObject = anecdote => ({
 
 const useAnecdoteStore = create((set) => ({
   anecdotes: anecdotesAtStart.map(asObject),
-  actions: {},
+  filter: '',
+  actions: {
+    vote: id => set(
+      state => ({ anecdotes: state.anecdotes.map(
+        a => a.id === id ? { ...a, votes: a.votes + 1 } : a) })
+    ),
+    add: anecdote => set(
+      state => ({ anecdotes: state.anecdotes.concat(asObject(anecdote)) })
+    ),
+    setFilter: value => set(() => ({ filter: value })) 
+  },
 }))
 
 export const useAnecdotes = () => useAnecdoteStore((state) => state.anecdotes)
+export const useFilter = () => useAnecdoteStore((state) => state.filter)
+export const useAnecdoteActions = () => useAnecdoteStore((state) => state.actions)
