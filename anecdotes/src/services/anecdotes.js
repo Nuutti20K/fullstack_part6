@@ -11,4 +11,42 @@ const getAll = async () => {
   return data
 }
 
-export default { getAll }
+const createNew = async (content) => {
+  const response = await fetch(baseUrl, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ content, votes: 0 }),
+  })
+  
+  if (!response.ok) {
+    throw new Error('Failed to create anecdote')
+  }
+  
+  return await response.json()
+}
+
+const update = async (id, newAnecdote) => {
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newAnecdote),
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to update anecdote')
+  }
+
+  return await response.json()
+}
+
+const remove = async (id) => {
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: 'DELETE',
+  })
+
+  if (!response.ok) {
+    throw new Error('Failed to remove anecdote')
+  }
+}
+
+export default { getAll, createNew, update, remove }
