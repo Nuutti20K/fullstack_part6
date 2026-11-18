@@ -3,12 +3,18 @@ import Notification from './components/Notification'
 import { useQuery } from '@tanstack/react-query'
 import { getAnecdotes } from './requests'
 import { useAnecdotes } from './hooks/useAnecdotes'
+import useNotify from './hooks/useNotify'
 
 const App = () => {
   const { anecdotes, isPending, isError, vote } = useAnecdotes()
+  const { setMessage } = useNotify()
 
   const handleVote = (anecdote) => {
     vote(anecdote)
+    setMessage(`anecdote '${anecdote.content}' voted`)
+    setTimeout(() => {
+      setMessage(null)
+    }, 5000)
   }
  
   if (isPending) {
